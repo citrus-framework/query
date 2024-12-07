@@ -1,0 +1,15 @@
+# IDE
+/.idea
+
+# composer
+/vendor
+composer.lock
+
+# phpunit
+.phpunit.result.cache
+phpunit.tdx
+
+#tests
+/tests/Sample/Integration/Condition
+/tests/Sample/Integration/Dao
+/tests/Sample/Integration/Property
