@@ -30,11 +30,11 @@ trait Where
 
     /**
      * Where =
-     * @param string $arg1
-     * @param string $arg2
+     * @param string     $arg1
+     * @param string|int $arg2
      * @return $this
      */
-    public function whereEqual(string $arg1, string $arg2): self
+    public function whereEqual(string $arg1, string|int $arg2): self
     {
         $this->wheres[] = new Equal($arg1, $arg2);
         return $this;
@@ -134,8 +134,8 @@ trait Where
         if (count($this->wheres) > 0)
         {
             $query .= 'WHERE ' . implode(' AND ', array_map(function (Expression $expr) {
-                return $expr->toQuery();
-            }, $this->wheres));
+                    return $expr->toQuery();
+                }, $this->wheres));
         }
         return $query;
     }

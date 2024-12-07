@@ -17,12 +17,12 @@ class Equal implements Expression
 {
     /**
      * constructor.
-     * @param string $arg1
-     * @param string $arg2
+     * @param string     $arg1
+     * @param string|int $arg2
      */
     public function __construct(
         protected string $arg1,
-        protected string $arg2,
+        protected string|int $arg2,
     ) {
     }
 
