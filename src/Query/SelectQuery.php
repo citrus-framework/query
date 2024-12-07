@@ -107,6 +107,6 @@ class SelectQuery implements CrudQuery
      */
     public function toQueryPack(): QueryPack
     {
-        return new QueryPack($this->toQuery(), $this->toParameters());
+        return new QueryPack($this->toQuery(), $this->toParameters(), $this->resultClass);
     }
 }
