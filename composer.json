@@ -1,0 +1,35 @@
+{
+  "name": "citrus-framework/query",
+  "description": "php database query builder and access library",
+  "keywords": ["citrus", "php", "library", "database", "query"],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "take64",
+      "email": "take64@citrus.tk"
+    }
+  ],
+  "require": {
+    "citrus-framework/collection": "^1.0",
+    "citrus-framework/configure": "^1.0",
+    "citrus-framework/database": "^1.0",
+    "ext-pdo": "*"
+  },
+  "require-dev": {
+    "php": "^8.3",
+    "phpunit/phpunit": "^10.5",
+    "nunomaduro/phpinsights": "^v2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Citrus\\": "src/",
+      "Test\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
+}
