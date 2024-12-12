@@ -10,8 +10,9 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Citrus\Query\Builder;
+use Citrus\Query\Set\PropertyPair;
 use PHPUnit\Framework\TestCase;
-use Query\QueryBuilder;
 
 /**
  * Query Builder Test
@@ -23,7 +24,7 @@ class QueryBuilderTest extends TestCase
      */
     public function testDeleteQuery()
     {
-        $deleteQuery = (new QueryBuilder('samples'))->deleteQuery();
+        $deleteQuery = (new Builder('samples'))->deleteQuery();
         $deleteQuery->whereEqual('sample_id', '1')
             ->whereGreaterThan('sample_id', '2')
             ->whereGreaterThanEqual('sample_id', '3')
@@ -42,7 +43,7 @@ class QueryBuilderTest extends TestCase
      */
     public function testInsertQuery()
     {
-        $insertQuery = (new QueryBuilder('samples'))->insertQuery();
+        $insertQuery = (new Builder('samples'))->insertQuery();
         $insertQuery->properties([
             'sample_id' => 'a',
             'name' => 'b',
@@ -57,7 +58,7 @@ class QueryBuilderTest extends TestCase
      */
     public function testSelectQuery()
     {
-        $selectQuery = (new QueryBuilder('samples'))->selectQuery()->properties(['sample_id', 'name', 'created_at']);
+        $selectQuery = (new Builder('samples'))->selectQuery()->properties(['sample_id', 'name', 'created_at']);
         $selectQuery
             ->whereEqual('sample_id', '1')
             ->whereGreaterThan('sample_id', '2')
@@ -77,9 +78,9 @@ class QueryBuilderTest extends TestCase
      */
     public function testUpdateQuery()
     {
-        $updateQuery = (new QueryBuilder('samples'))->updateQuery()->properties([
-            'sample_id' => 'a',
-            'name' => 'b',
+        $updateQuery = (new Builder('samples'))->updateQuery()->properties([
+            new PropertyPair('sample_id', 'a'),
+            new PropertyPair('name', 'b'),
         ]);
         $updateQuery
             ->whereEqual('sample_id', '1')

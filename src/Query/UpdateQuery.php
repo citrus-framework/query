@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace Citrus\Query;
 
 use Citrus\Database\QueryPack;
+use Citrus\Query\Set\PropertyPair;
+use Citrus\Query\Set\RawExpr;
 use Citrus\Query\Where\Expression;
 
 /**
@@ -22,9 +24,9 @@ class UpdateQuery implements CrudQuery
 
     /**
      * constructor.
-     * @param string       $table      対象テーブル
-     * @param array        $properties 取得プロパティ
-     * @param Expression[] $wheres     Where条件
+     * @param string         $table      対象テーブル
+     * @param PropertyPair[] $properties 取得プロパティ
+     * @param Expression[]   $wheres     Where条件
      */
     public function __construct(
         protected string $table = '',
@@ -46,8 +48,8 @@ class UpdateQuery implements CrudQuery
     }
 
     /**
-     * 取得プロパティの定義
-     * @param string[] $properties
+     * 保存プロパティの定義
+     * @param PropertyPair[] $properties
      * @return $this
      */
     public function properties(array $properties): self
@@ -68,9 +70,9 @@ class UpdateQuery implements CrudQuery
 
         // Set
         $sets = [];
-        foreach (array_keys($this->properties) as $key)
+        foreach ($this->properties as $propertyPair)
         {
-            $sets[] = sprintf('%s = ?', $key);
+            $sets[] = $propertyPair->toQuery();
         }
         $query .= ' SET ' . implode(', ', $sets);
 
@@ -88,7 +90,12 @@ class UpdateQuery implements CrudQuery
      */
     public function toParameters(): array
     {
-        return array_merge(array_values($this->properties), $this->toWhereParameters());
+        $properties = [];
+        foreach ($this->properties as $propertyPair)
+        {
+            $properties = array_merge($properties, $propertyPair->parameters());
+        }
+        return array_merge($properties, $this->toWhereParameters());
     }
 
     /**
