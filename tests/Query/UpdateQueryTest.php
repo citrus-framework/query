@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Test\Query;
 
+use Citrus\Query\Set\PropertyPair;
 use Citrus\Query\UpdateQuery;
 use PHPUnit\Framework\TestCase;
 
@@ -25,8 +26,8 @@ class UpdateQueryTest extends TestCase
     {
         $updateQuery = new UpdateQuery('samples');
         $updateQuery->properties([
-            'sample_id' => 'a',
-            'name' => 'b',
+            new PropertyPair('sample_id', 'a'),
+            new PropertyPair('name', 'b'),
         ]);
         $updateQuery
             ->whereEqual('sample_id', '1')

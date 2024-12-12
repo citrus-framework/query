@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Citrus\Query;
 
+//use Citrus\Database\Columns;
 use Citrus\Query\Where\Equal;
 use Citrus\Query\Where\Expression;
 use Citrus\Query\Where\GreaterThan;
@@ -123,6 +124,29 @@ trait Where
         $this->wheres[] = new NotIn($arg1, $arg2);
         return $this;
     }
+
+//    /**
+//     * Where List Set
+//     * @param Columns $arg1
+//     * @return $this
+//     */
+//    public function wheres(Columns $arg1): self
+//    {
+//        $properties = $arg1->properties();
+//        foreach ($properties as $ky => $vl) {
+//            // 設定がなければスキップ
+//            if (is_null($vl) === true)
+//            {
+//                continue;
+//            }
+//
+//
+//        }
+//
+//
+//        $this->wheres[] = new NotIn($arg1, $arg2);
+//        return $this;
+//    }
 
     /**
      * クエリ生成
