@@ -14,7 +14,6 @@ use Citrus\Database\Connection\Connection;
 use Citrus\Database\Connection\ConnectionPool;
 use Citrus\Database\DatabaseException;
 use Citrus\Database\ResultSet\ResultSet;
-use Citrus\Logger;
 use PDOStatement;
 
 /**
@@ -32,8 +31,7 @@ class Executor
      */
     public function __construct(
         protected Connection|null $connection = null
-    )
-    {
+    ) {
         // なければPOOLから取得
         $this->connection = $connection ?: ConnectionPool::callDefault();
         // 接続もしてしまう
