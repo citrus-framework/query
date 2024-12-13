@@ -11,8 +11,6 @@ declare(strict_types=1);
 namespace Citrus\Query;
 
 use Citrus\Database\QueryPack;
-use Citrus\Query\Set\PropertyPair;
-use Citrus\Query\Set\RawExpr;
 use Citrus\Query\Where\Expression;
 
 /**
@@ -24,9 +22,9 @@ class UpdateQuery implements CrudQuery
 
     /**
      * constructor.
-     * @param string         $table      対象テーブル
-     * @param PropertyPair[] $properties 取得プロパティ
-     * @param Expression[]   $wheres     Where条件
+     * @param string                                            $table      対象テーブル
+     * @param array<string, string|int|bool|float|RawExpr|null> $properties 取得プロパティ
+     * @param Expression[]                                      $wheres     Where条件
      */
     public function __construct(
         protected string $table = '',
@@ -49,7 +47,7 @@ class UpdateQuery implements CrudQuery
 
     /**
      * 保存プロパティの定義
-     * @param PropertyPair[] $properties
+     * @param array<string, string|int|bool|float|RawExpr|null> $properties
      * @return $this
      */
     public function properties(array $properties): self
@@ -70,9 +68,16 @@ class UpdateQuery implements CrudQuery
 
         // Set
         $sets = [];
-        foreach ($this->properties as $propertyPair)
+        foreach ($this->properties as $ky => $vl)
         {
-            $sets[] = $propertyPair->toQuery();
+            if ($vl instanceof RawExpr)
+            {
+                // クエリ直書きの場合
+                $sets[] = sprintf('%s = %s', $ky, $vl->toQuery());
+                continue;
+            }
+
+            $sets[] = sprintf('%s = ?', $ky);
         }
         $query .= ' SET ' . implode(', ', $sets);
 
@@ -91,9 +96,15 @@ class UpdateQuery implements CrudQuery
     public function toParameters(): array
     {
         $properties = [];
-        foreach ($this->properties as $propertyPair)
+        foreach ($this->properties as $vl)
         {
-            $properties = array_merge($properties, $propertyPair->parameters());
+            if ($vl instanceof RawExpr)
+            {
+                // クエリ直書きの場合はprepareのパラメータにはならないのでskip
+                continue;
+            }
+
+            $properties[] = $vl;
         }
         return array_merge($properties, $this->toWhereParameters());
     }

@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Citrus\Query;
 
-//use Citrus\Database\Columns;
 use Citrus\Query\Where\Equal;
 use Citrus\Query\Where\Expression;
 use Citrus\Query\Where\GreaterThan;
@@ -158,8 +157,8 @@ trait Where
         if (count($this->wheres) > 0)
         {
             $query .= 'WHERE ' . implode(' AND ', array_map(function (Expression $expr) {
-                    return $expr->toQuery();
-                }, $this->wheres));
+                return $expr->toQuery();
+            }, $this->wheres));
         }
         return $query;
     }
