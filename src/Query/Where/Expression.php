@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Citrus\Query\Where;
 
 /**
- * Where Part Expression
+ * Expression Interface
  */
 interface Expression
 {
@@ -19,7 +19,7 @@ interface Expression
      * クエリ文字列
      * @return string
      */
-    public function toQuery(): string;
+    public function query(): string;
 
     /**
      * オペレーター文字列

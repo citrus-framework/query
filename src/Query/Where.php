@@ -157,7 +157,7 @@ trait Where
         if (count($this->wheres) > 0)
         {
             $query .= 'WHERE ' . implode(' AND ', array_map(function (Expression $expr) {
-                return $expr->toQuery();
+                return $expr->query();
             }, $this->wheres));
         }
         return $query;

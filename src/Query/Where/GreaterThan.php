@@ -29,7 +29,7 @@ class GreaterThan implements Expression
     /**
      * {@inheritDoc}
      */
-    public function toQuery(): string
+    public function query(): string
     {
         return sprintf(
             '%s %s ?',

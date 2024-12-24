@@ -19,6 +19,7 @@ use Citrus\Query\Where\Expression;
 class SelectQuery implements CrudQuery
 {
     use Where;
+    use LimitOffset;
 
     /**
      * constructor.
@@ -91,6 +92,9 @@ class SelectQuery implements CrudQuery
             $query .= ' ' . $this->toWhereQuery();
         }
 
+        // Limit / Offset
+        $query .= ' ' . $this->toLimitOffsetQuery();
+
         return $query;
     }
 
@@ -99,7 +103,7 @@ class SelectQuery implements CrudQuery
      */
     public function toParameters(): array
     {
-        return $this->toWhereParameters();
+        return array_merge($this->toWhereParameters(), $this->toLimitOffsetParameters());
     }
 
     /**

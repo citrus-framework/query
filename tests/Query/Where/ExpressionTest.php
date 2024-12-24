@@ -32,7 +32,7 @@ class ExpressionTest extends TestCase
     {
         $equal = new Equal('aaa', '10');
 
-        $this->assertSame('aaa = ?', $equal->toQuery());
+        $this->assertSame('aaa = ?', $equal->query());
         $this->assertSame(['10'], $equal->parameters());
     }
 
@@ -43,7 +43,7 @@ class ExpressionTest extends TestCase
     {
         $equal = new NotEqual('aaa', '10');
 
-        $this->assertSame('aaa != ?', $equal->toQuery());
+        $this->assertSame('aaa != ?', $equal->query());
         $this->assertSame(['10'], $equal->parameters());
     }
 
@@ -54,7 +54,7 @@ class ExpressionTest extends TestCase
     {
         $equal = new LessThan('aaa', '10');
 
-        $this->assertSame('aaa < ?', $equal->toQuery());
+        $this->assertSame('aaa < ?', $equal->query());
         $this->assertSame(['10'], $equal->parameters());
     }
 
@@ -65,7 +65,7 @@ class ExpressionTest extends TestCase
     {
         $equal = new LessThanEqual('aaa', '10');
 
-        $this->assertSame('aaa <= ?', $equal->toQuery());
+        $this->assertSame('aaa <= ?', $equal->query());
         $this->assertSame(['10'], $equal->parameters());
     }
 
@@ -76,7 +76,7 @@ class ExpressionTest extends TestCase
     {
         $equal = new GreaterThan('aaa', '10');
 
-        $this->assertSame('aaa > ?', $equal->toQuery());
+        $this->assertSame('aaa > ?', $equal->query());
         $this->assertSame(['10'], $equal->parameters());
     }
 
@@ -87,7 +87,7 @@ class ExpressionTest extends TestCase
     {
         $equal = new GreaterThanEqual('aaa', '10');
 
-        $this->assertSame('aaa >= ?', $equal->toQuery());
+        $this->assertSame('aaa >= ?', $equal->query());
         $this->assertSame(['10'], $equal->parameters());
     }
 
@@ -98,7 +98,7 @@ class ExpressionTest extends TestCase
     {
         $equal = new In('aaa', ['10', '11', '12']);
 
-        $this->assertSame('aaa IN (?, ?, ?)', $equal->toQuery());
+        $this->assertSame('aaa IN (?, ?, ?)', $equal->query());
         $this->assertSame(['10', '11', '12'], $equal->parameters());
     }
 
@@ -109,7 +109,7 @@ class ExpressionTest extends TestCase
     {
         $equal = new NotIn('aaa', ['10', '11', '12']);
 
-        $this->assertSame('aaa NOT IN (?, ?, ?)', $equal->toQuery());
+        $this->assertSame('aaa NOT IN (?, ?, ?)', $equal->query());
         $this->assertSame(['10', '11', '12'], $equal->parameters());
     }
 }
