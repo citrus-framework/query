@@ -20,6 +20,7 @@ class SelectQuery implements CrudQuery
 {
     use Where;
     use LimitOffset;
+    use OrderBy;
 
     /**
      * constructor.
@@ -90,6 +91,12 @@ class SelectQuery implements CrudQuery
         if (count($this->wheres) > 0)
         {
             $query .= ' ' . $this->toWhereQuery();
+        }
+
+        // Order By
+        if (count($this->orders) > 0)
+        {
+            $query .= ' ' . $this->toOrderByQuery();
         }
 
         // Limit / Offset
