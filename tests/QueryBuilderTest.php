@@ -69,7 +69,7 @@ class QueryBuilderTest extends TestCase
             ->whereNotEqual('sample_id', '8')
             ->whereNotIn('sample_id', ['9', '10', '11']);
 
-        $this->assertSame('SELECT sample_id, name, created_at FROM samples WHERE sample_id = ? AND sample_id > ? AND sample_id >= ? AND sample_id IN (?, ?) AND sample_id < ? AND sample_id <= ? AND sample_id != ? AND sample_id NOT IN (?, ?, ?)', $selectQuery->toQuery());
+        $this->assertSame('SELECT sample_id, name, created_at FROM samples WHERE sample_id = ? AND sample_id > ? AND sample_id >= ? AND sample_id IN (?, ?) AND sample_id < ? AND sample_id <= ? AND sample_id != ? AND sample_id NOT IN (?, ?, ?) ', $selectQuery->toQuery());
         $this->assertSame(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'], $selectQuery->toParameters());
     }
 
