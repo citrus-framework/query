@@ -17,8 +17,10 @@ use Citrus\Query\Where\GreaterThanEqual;
 use Citrus\Query\Where\In;
 use Citrus\Query\Where\LessThan;
 use Citrus\Query\Where\LessThanEqual;
+use Citrus\Query\Where\Like;
 use Citrus\Query\Where\NotEqual;
 use Citrus\Query\Where\NotIn;
+use Citrus\Query\Where\NotLike;
 
 /**
  * Where Query Part Builder
@@ -121,6 +123,30 @@ trait Where
     public function whereNotIn(string $arg1, array $arg2): self
     {
         $this->wheres[] = new NotIn($arg1, $arg2);
+        return $this;
+    }
+
+    /**
+     * Where Like
+     * @param string $arg1
+     * @param string $arg2
+     * @return $this
+     */
+    public function whereLike(string $arg1, string $arg2): self
+    {
+        $this->wheres[] = new Like($arg1, $arg2);
+        return $this;
+    }
+
+    /**
+     * Where Not Like
+     * @param string $arg1
+     * @param string $arg2
+     * @return $this
+     */
+    public function whereNotLike(string $arg1, string $arg2): self
+    {
+        $this->wheres[] = new NotLike($arg1, $arg2);
         return $this;
     }
 
