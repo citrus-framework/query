@@ -3,7 +3,7 @@
   "description": "php database query builder and access library",
   "keywords": ["citrus", "php", "library", "database", "query"],
   "type": "library",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "authors": [
     {
       "name": "take64",
