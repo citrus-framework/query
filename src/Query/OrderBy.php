@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace Citrus\Query;
 
+use Citrus\Variable\Strings;
+
 /**
  * Order By
  */
@@ -20,12 +22,17 @@ trait OrderBy
 
     /**
      * Order By
-     * @param string    $column
-     * @param bool|null $ascending
+     * @param string|null $column
+     * @param bool|null   $ascending
      * @return $this
      */
-    public function orderBy(string $column, bool $ascending = true): self
+    public function orderBy(string|null $column, bool $ascending = true): self
     {
+        if (Strings::isEmpty($column))
+        {
+            return $this;
+        }
+
         $this->orders[$column] = $ascending;
         return $this;
     }
