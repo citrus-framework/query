@@ -55,12 +55,17 @@ trait LimitOffset
 
     /**
      * pagination
-     * @param int $page
-     * @param int $limit
+     * @param int|null $page
+     * @param int|null $limit
      * @return $this
      */
-    public function pagination(int $page, int $limit): self
+    public function pagination(int|null $page, int|null $limit): self
     {
+        if (is_null($page) or is_null($limit))
+        {
+            return $this;
+        }
+
         $this->limit = $limit;
         $this->offset = ($page * $limit) - $limit;
         return $this;
