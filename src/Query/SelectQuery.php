@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Citrus\Query;
 
 use Citrus\Database\QueryPack;
+use Citrus\Query\ResultSet\ResultCount;
 use Citrus\Query\Where\Expression;
 
 /**
@@ -77,9 +78,20 @@ class SelectQuery implements CrudQuery
     public function toQuery(): string
     {
         // Columns
-        $columns = count($this->properties) > 0
-            ? implode(', ', $this->properties)
-            : '*';
+        $columns = '';
+        // 結果クラスがカウントの場合はプロパティをcount(*) as countにする
+        if (count($this->properties) === 0 and $this->resultClass === ResultCount::class)
+        {
+            $columns = 'count(*) AS count';
+        }
+        else if (count($this->properties) === 0)
+        {
+            $columns = '*';
+        }
+        else
+        {
+            $columns = implode(', ', $this->properties);
+        }
 
         $query = sprintf(
             'SELECT %s FROM %s',
