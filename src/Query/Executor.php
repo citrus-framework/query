@@ -13,7 +13,7 @@ namespace Citrus\Query;
 use Citrus\Database\Connection\Connection;
 use Citrus\Database\Connection\ConnectionPool;
 use Citrus\Database\DatabaseException;
-use Citrus\Database\ResultSet\ResultSet;
+use Citrus\Query\ResultSet\ResultSet;
 use PDOStatement;
 
 /**
