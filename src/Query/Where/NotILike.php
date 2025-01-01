@@ -11,9 +11,9 @@ declare(strict_types=1);
 namespace Citrus\Query\Where;
 
 /**
- * Where Part Not Like
+ * Where Part Not ILike
  */
-class NotLike implements Expression
+class NotILike implements Expression
 {
     /**
      * constructor.
@@ -43,7 +43,7 @@ class NotLike implements Expression
      */
     public function operator(): string
     {
-        return 'NOT LIKE';
+        return 'NOT ILIKE';
     }
 
     /**

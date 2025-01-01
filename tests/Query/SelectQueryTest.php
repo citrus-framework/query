@@ -36,13 +36,15 @@ class SelectQueryTest extends TestCase
             ->whereNotIn('sample_id', ['9', '10', '11'])
             ->whereLike('sample_id', '%12')
             ->whereNotLike('sample_id', '13_')
+            ->whereILike('sample_id', '%14')
+            ->whereNotILike('sample_id', '15_')
             ->pagination(3, 10)
             ->orderBy('sample_id')
             ->orderBy('name', false)
         ;
 
-        $this->assertSame('SELECT sample_id, name, created_at FROM samples WHERE sample_id = ? AND sample_id > ? AND sample_id >= ? AND sample_id IN (?, ?) AND sample_id < ? AND sample_id <= ? AND sample_id != ? AND sample_id NOT IN (?, ?, ?) AND sample_id LIKE ? AND sample_id NOT LIKE ? ORDER BY sample_id ASC, name DESC LIMIT ? OFFSET ?', $selectQuery->toQuery());
-        $this->assertSame(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '%12', '13_', 10, 20], $selectQuery->toParameters());
+        $this->assertSame('SELECT sample_id, name, created_at FROM samples WHERE sample_id = ? AND sample_id > ? AND sample_id >= ? AND sample_id IN (?, ?) AND sample_id < ? AND sample_id <= ? AND sample_id != ? AND sample_id NOT IN (?, ?, ?) AND sample_id LIKE ? AND sample_id NOT LIKE ? AND sample_id ILIKE ? AND sample_id NOT ILIKE ? ORDER BY sample_id ASC, name DESC LIMIT ? OFFSET ?', $selectQuery->toQuery());
+        $this->assertSame(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '%12', '13_', '%14', '15_', 10, 20], $selectQuery->toParameters());
     }
     /**
      * @test
