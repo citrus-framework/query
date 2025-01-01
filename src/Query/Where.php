@@ -14,11 +14,13 @@ use Citrus\Query\Where\Equal;
 use Citrus\Query\Where\Expression;
 use Citrus\Query\Where\GreaterThan;
 use Citrus\Query\Where\GreaterThanEqual;
+use Citrus\Query\Where\ILike;
 use Citrus\Query\Where\In;
 use Citrus\Query\Where\LessThan;
 use Citrus\Query\Where\LessThanEqual;
 use Citrus\Query\Where\Like;
 use Citrus\Query\Where\NotEqual;
+use Citrus\Query\Where\NotILike;
 use Citrus\Query\Where\NotIn;
 use Citrus\Query\Where\NotLike;
 
@@ -147,6 +149,30 @@ trait Where
     public function whereNotLike(string $arg1, string $arg2): self
     {
         $this->wheres[] = new NotLike($arg1, $arg2);
+        return $this;
+    }
+
+    /**
+     * Where ILike
+     * @param string $arg1
+     * @param string $arg2
+     * @return $this
+     */
+    public function whereILike(string $arg1, string $arg2): self
+    {
+        $this->wheres[] = new ILike($arg1, $arg2);
+        return $this;
+    }
+
+    /**
+     * Where Not ILike
+     * @param string $arg1
+     * @param string $arg2
+     * @return $this
+     */
+    public function whereNotILike(string $arg1, string $arg2): self
+    {
+        $this->wheres[] = new NotILike($arg1, $arg2);
         return $this;
     }
 
