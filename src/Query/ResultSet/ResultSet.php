@@ -102,7 +102,7 @@ class ResultSet implements IteratorAggregate, Countable
      */
     public function one(): ResultClass|null
     {
-        return $this->getIterator()->current();
+        return $this->execute()->fetch();
     }
 
     /**
