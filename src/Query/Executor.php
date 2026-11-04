@@ -14,6 +14,7 @@ use Citrus\Database\Connection\Connection;
 use Citrus\Database\Connection\ConnectionPool;
 use Citrus\Database\DatabaseException;
 use Citrus\Query\ResultSet\ResultSet;
+use PDO;
 use PDOStatement;
 
 /**
@@ -99,9 +100,25 @@ class Executor
         // パラメータ設定
         foreach ($queryPack->callParameters() as $ky => $vl)
         {
-            $statement->bindValue($ky + 1, $vl);
+            $statement->bindValue($ky + 1, $vl, $this->pdoParamType($vl));
         }
 
         return $statement;
+    }
+
+    /**
+     * 値の型に合わせたPDOのパラメータ型を返す
+     * @param mixed $value 値
+     * @return int PDO::PARAM_*
+     */
+    protected function pdoParamType(mixed $value): int
+    {
+        return match (true)
+        {
+            is_bool($value) => PDO::PARAM_BOOL,
+            is_int($value)  => PDO::PARAM_INT,
+            is_null($value) => PDO::PARAM_NULL,
+            default         => PDO::PARAM_STR,
+        };
     }
 }

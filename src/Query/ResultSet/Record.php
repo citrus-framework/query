@@ -87,7 +87,7 @@ class Record extends \stdClass implements ResultClass
     public function completeForCreate(string|null $timestamp = null): void
     {
         // タイムスタンプ設定
-        $timestamp = $timestamp ?? Dates::now()->format('Y-m-d H:i:s');
+        $timestamp = $timestamp ?? Dates::now()->formatTimestampWithTimezone();
         $this->created_at = $timestamp;
         $this->updated_at = $timestamp;
     }
@@ -99,7 +99,7 @@ class Record extends \stdClass implements ResultClass
     public function completeForUpdate(string|null $timestamp = null): void
     {
         // タイムスタンプ設定
-        $timestamp = $timestamp ?? Dates::now()->format('Y-m-d H:i:s');
+        $timestamp = $timestamp ?? Dates::now()->formatTimestampWithTimezone();
         $this->updated_at = $timestamp;
         $this->rev = new RawExpr('rev + 1');
     }
