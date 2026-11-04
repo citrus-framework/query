@@ -14,6 +14,7 @@
     "citrus-framework/collection": "^1.0",
     "citrus-framework/configure": "^1.0",
     "citrus-framework/database": "^1.0",
+    "citrus-framework/variables": "^1.1.19",
     "ext-pdo": "*"
   },
   "require-dev": {
