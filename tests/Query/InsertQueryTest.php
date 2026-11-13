@@ -32,4 +32,38 @@ class InsertQueryTest extends TestCase
         $this->assertSame('INSERT INTO samples (sample_id, name) VALUES (?, ?)', $insertQuery->toQuery());
         $this->assertSame(['a', 'b'], $insertQuery->toParameters());
     }
+
+    /**
+     * @test
+     */
+    public function testOnConflictDoNothing()
+    {
+        $insertQuery = new InsertQuery('samples');
+        $insertQuery
+            ->properties([
+                'account_id' => 'a',
+                'event_uuid' => 'b',
+                'name' => 'c',
+            ])
+            ->onConflictDoNothing(['account_id', 'event_uuid']);
+
+        $this->assertSame('INSERT INTO samples (account_id, event_uuid, name) VALUES (?, ?, ?) ON CONFLICT (account_id, event_uuid) DO NOTHING', $insertQuery->toQuery());
+        $this->assertSame(['a', 'b', 'c'], $insertQuery->toParameters());
+    }
+
+    /**
+     * @test
+     */
+    public function testReturning()
+    {
+        $insertQuery = new InsertQuery('samples');
+        $insertQuery
+            ->properties([
+                'name' => 'a',
+            ])
+            ->returning(['sample_id', 'created_at']);
+
+        $this->assertSame('INSERT INTO samples (name) VALUES (?) RETURNING sample_id, created_at', $insertQuery->toQuery());
+        $this->assertSame(['a'], $insertQuery->toParameters());
+    }
 }

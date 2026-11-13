@@ -22,6 +22,8 @@ class SelectQuery implements CrudQuery
     use Where;
     use LimitOffset;
     use OrderBy;
+    use Join;
+    use GroupBy;
 
     /**
      * constructor.
@@ -77,32 +79,28 @@ class SelectQuery implements CrudQuery
      */
     public function toQuery(): string
     {
-        // Columns
-        $columns = '';
-        // 結果クラスがカウントの場合はプロパティをcount(*) as countにする
-        if (count($this->properties) === 0 and $this->resultClass === ResultCount::class)
-        {
-            $columns = 'count(*) AS count';
-        }
-        else if (count($this->properties) === 0)
-        {
-            $columns = '*';
-        }
-        else
-        {
-            $columns = implode(', ', $this->properties);
-        }
-
         $query = sprintf(
             'SELECT %s FROM %s',
-            $columns,
+            $this->toColumnsQuery(),
             $this->table,
         );
+
+        // Join
+        if (count($this->joins) > 0)
+        {
+            $query .= ' ' . $this->toJoinQuery();
+        }
 
         // Where
         if (count($this->wheres) > 0)
         {
             $query .= ' ' . $this->toWhereQuery();
+        }
+
+        // Group By
+        if (count($this->groups) > 0)
+        {
+            $query .= ' ' . $this->toGroupByQuery();
         }
 
         // Order By
@@ -131,5 +129,24 @@ class SelectQuery implements CrudQuery
     public function toQueryPack(): QueryPack
     {
         return new QueryPack($this->toQuery(), $this->toParameters(), $this->resultClass);
+    }
+
+    /**
+     * 取得カラムのクエリ生成
+     * @return string
+     */
+    protected function toColumnsQuery(): string
+    {
+        // 結果クラスがカウントの場合はプロパティをcount(*) as countにする
+        if (0 === count($this->properties) and ResultCount::class === $this->resultClass)
+        {
+            return 'count(*) AS count';
+        }
+        if (0 === count($this->properties))
+        {
+            return '*';
+        }
+
+        return implode(', ', $this->properties);
     }
 }

@@ -37,4 +37,19 @@ class DeleteQueryTest extends TestCase
         $this->assertSame('DELETE FROM samples WHERE sample_id = ? AND sample_id > ? AND sample_id >= ? AND sample_id IN (?, ?) AND sample_id < ? AND sample_id <= ? AND sample_id != ? AND sample_id NOT IN (?, ?, ?)', $deleteQuery->toQuery());
         $this->assertSame(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'], $deleteQuery->toParameters());
     }
+
+    /**
+     * @test
+     */
+    public function testWhereNullAndWhereNotNull()
+    {
+        $deleteQuery = new DeleteQuery('samples');
+        $deleteQuery
+            ->whereNull('deleted_at')
+            ->whereEqual('sample_id', '1')
+            ->whereNotNull('created_at');
+
+        $this->assertSame('DELETE FROM samples WHERE deleted_at IS NULL AND sample_id = ? AND created_at IS NOT NULL', $deleteQuery->toQuery());
+        $this->assertSame(['1'], $deleteQuery->toParameters());
+    }
 }

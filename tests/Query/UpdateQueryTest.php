@@ -42,4 +42,22 @@ class UpdateQueryTest extends TestCase
         $this->assertSame('UPDATE samples SET sample_id = ?, name = b + 1 WHERE sample_id = ? AND sample_id > ? AND sample_id >= ? AND sample_id IN (?, ?) AND sample_id < ? AND sample_id <= ? AND sample_id != ? AND sample_id NOT IN (?, ?, ?)', $updateQuery->toQuery());
         $this->assertSame(['a', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'], $updateQuery->toParameters());
     }
+
+    /**
+     * @test
+     */
+    public function testWhereNullAndWhereNotNull()
+    {
+        $updateQuery = new UpdateQuery('samples');
+        $updateQuery->properties([
+            'name' => 'a',
+        ]);
+        $updateQuery
+            ->whereEqual('sample_id', '1')
+            ->whereNull('deleted_at')
+            ->whereNotNull('created_at');
+
+        $this->assertSame('UPDATE samples SET name = ? WHERE sample_id = ? AND deleted_at IS NULL AND created_at IS NOT NULL', $updateQuery->toQuery());
+        $this->assertSame(['a', '1'], $updateQuery->toParameters());
+    }
 }

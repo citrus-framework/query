@@ -67,6 +67,22 @@ class Executor
     }
 
     /**
+     * クエリの実行 INSERT ... RETURNING
+     * @return array<int, array<string, string|int|bool|float|null>> RETURNINGで返った行(カラム名 => 値)
+     */
+    public function executeReturning(): array
+    {
+        // プリペア
+        $statement = $this->prepareAndBind();
+
+        // 実行
+        $statement->execute();
+
+        // 返った行を返す
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * クエリの実行 SELECT
      * @return ResultSet
      */
