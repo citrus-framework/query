@@ -17,6 +17,9 @@ use Citrus\Database\QueryPack;
  */
 class InsertQuery implements CrudQuery
 {
+    use OnConflict;
+    use Returning;
+
     /**
      * constructor.
      * @param string $table      対象テーブル
@@ -55,12 +58,26 @@ class InsertQuery implements CrudQuery
      */
     public function toQuery(): string
     {
-        return sprintf(
+        $query = sprintf(
             'INSERT INTO %s (%s) VALUES (%s)',
             $this->table,
             implode(', ', array_keys($this->properties)),
             implode(', ', array_fill(0, count($this->properties), '?')),
         );
+
+        // On Conflict
+        if (count($this->conflicts) > 0)
+        {
+            $query .= ' ' . $this->toOnConflictQuery();
+        }
+
+        // Returning
+        if (count($this->returnings) > 0)
+        {
+            $query .= ' ' . $this->toReturningQuery();
+        }
+
+        return $query;
     }
 
     /**

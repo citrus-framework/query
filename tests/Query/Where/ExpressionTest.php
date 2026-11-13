@@ -14,6 +14,8 @@ use Citrus\Query\Where\Equal;
 use Citrus\Query\Where\GreaterThan;
 use Citrus\Query\Where\GreaterThanEqual;
 use Citrus\Query\Where\In;
+use Citrus\Query\Where\IsNotNull;
+use Citrus\Query\Where\IsNull;
 use Citrus\Query\Where\LessThan;
 use Citrus\Query\Where\LessThanEqual;
 use Citrus\Query\Where\NotEqual;
@@ -111,5 +113,27 @@ class ExpressionTest extends TestCase
 
         $this->assertSame('aaa NOT IN (?, ?, ?)', $equal->query());
         $this->assertSame(['10', '11', '12'], $equal->parameters());
+    }
+
+    /**
+     * @test
+     */
+    public function testIsNull()
+    {
+        $equal = new IsNull('aaa');
+
+        $this->assertSame('aaa IS NULL', $equal->query());
+        $this->assertSame([], $equal->parameters());
+    }
+
+    /**
+     * @test
+     */
+    public function testIsNotNull()
+    {
+        $equal = new IsNotNull('aaa');
+
+        $this->assertSame('aaa IS NOT NULL', $equal->query());
+        $this->assertSame([], $equal->parameters());
     }
 }

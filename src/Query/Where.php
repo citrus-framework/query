@@ -16,6 +16,8 @@ use Citrus\Query\Where\GreaterThan;
 use Citrus\Query\Where\GreaterThanEqual;
 use Citrus\Query\Where\ILike;
 use Citrus\Query\Where\In;
+use Citrus\Query\Where\IsNotNull;
+use Citrus\Query\Where\IsNull;
 use Citrus\Query\Where\LessThan;
 use Citrus\Query\Where\LessThanEqual;
 use Citrus\Query\Where\Like;
@@ -173,6 +175,28 @@ trait Where
     public function whereNotILike(string $arg1, string $arg2): self
     {
         $this->wheres[] = new NotILike($arg1, $arg2);
+        return $this;
+    }
+
+    /**
+     * Where Is Null
+     * @param string $arg1
+     * @return $this
+     */
+    public function whereNull(string $arg1): self
+    {
+        $this->wheres[] = new IsNull($arg1);
+        return $this;
+    }
+
+    /**
+     * Where Is Not Null
+     * @param string $arg1
+     * @return $this
+     */
+    public function whereNotNull(string $arg1): self
+    {
+        $this->wheres[] = new IsNotNull($arg1);
         return $this;
     }
 

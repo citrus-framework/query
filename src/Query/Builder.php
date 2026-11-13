@@ -48,6 +48,16 @@ class Builder
     }
 
     /**
+     * INSERT(複数行)
+     * @return BulkInsertQuery
+     */
+    public function bulkInsertQuery(): BulkInsertQuery
+    {
+        $this->query = new BulkInsertQuery($this->table);
+        return $this->query;
+    }
+
+    /**
      * SELECT
      * @return SelectQuery
      */
