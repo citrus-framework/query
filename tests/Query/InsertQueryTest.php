@@ -18,9 +18,6 @@ use PHPUnit\Framework\TestCase;
  */
 class InsertQueryTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function testToQueryAndToParameters()
     {
         $insertQuery = new InsertQuery('samples');
@@ -33,9 +30,6 @@ class InsertQueryTest extends TestCase
         $this->assertSame(['a', 'b'], $insertQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testOnConflictDoNothing()
     {
         $insertQuery = new InsertQuery('samples');
@@ -51,9 +45,6 @@ class InsertQueryTest extends TestCase
         $this->assertSame(['a', 'b', 'c'], $insertQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testReturning()
     {
         $insertQuery = new InsertQuery('samples');

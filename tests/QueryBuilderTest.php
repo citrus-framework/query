@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
  */
 class QueryBuilderTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function testDeleteQuery()
     {
         $deleteQuery = (new Builder('samples'))->deleteQuery();
@@ -38,9 +35,6 @@ class QueryBuilderTest extends TestCase
         $this->assertSame(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'], $deleteQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testInsertQuery()
     {
         $insertQuery = (new Builder('samples'))->insertQuery();
@@ -53,9 +47,6 @@ class QueryBuilderTest extends TestCase
         $this->assertSame(['a', 'b'], $insertQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testSelectQuery()
     {
         $selectQuery = (new Builder('samples'))->selectQuery()->properties(['sample_id', 'name', 'created_at']);
@@ -73,9 +64,6 @@ class QueryBuilderTest extends TestCase
         $this->assertSame(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'], $selectQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testUpdateQuery()
     {
         $updateQuery = (new Builder('samples'))->updateQuery()->properties([

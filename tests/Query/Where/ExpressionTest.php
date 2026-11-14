@@ -27,9 +27,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ExpressionTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function testEqual()
     {
         $equal = new Equal('aaa', '10');
@@ -38,9 +35,6 @@ class ExpressionTest extends TestCase
         $this->assertSame(['10'], $equal->parameters());
     }
 
-    /**
-     * @test
-     */
     public function testNotEqual()
     {
         $equal = new NotEqual('aaa', '10');
@@ -49,9 +43,6 @@ class ExpressionTest extends TestCase
         $this->assertSame(['10'], $equal->parameters());
     }
 
-    /**
-     * @test
-     */
     public function testLessThan()
     {
         $equal = new LessThan('aaa', '10');
@@ -60,9 +51,6 @@ class ExpressionTest extends TestCase
         $this->assertSame(['10'], $equal->parameters());
     }
 
-    /**
-     * @test
-     */
     public function testLessThanEqual()
     {
         $equal = new LessThanEqual('aaa', '10');
@@ -71,9 +59,6 @@ class ExpressionTest extends TestCase
         $this->assertSame(['10'], $equal->parameters());
     }
 
-    /**
-     * @test
-     */
     public function testGreaterThan()
     {
         $equal = new GreaterThan('aaa', '10');
@@ -82,9 +67,6 @@ class ExpressionTest extends TestCase
         $this->assertSame(['10'], $equal->parameters());
     }
 
-    /**
-     * @test
-     */
     public function testGreaterThanEqual()
     {
         $equal = new GreaterThanEqual('aaa', '10');
@@ -93,9 +75,6 @@ class ExpressionTest extends TestCase
         $this->assertSame(['10'], $equal->parameters());
     }
 
-    /**
-     * @test
-     */
     public function testIn()
     {
         $equal = new In('aaa', ['10', '11', '12']);
@@ -104,9 +83,6 @@ class ExpressionTest extends TestCase
         $this->assertSame(['10', '11', '12'], $equal->parameters());
     }
 
-    /**
-     * @test
-     */
     public function testNotIn()
     {
         $equal = new NotIn('aaa', ['10', '11', '12']);
@@ -115,9 +91,6 @@ class ExpressionTest extends TestCase
         $this->assertSame(['10', '11', '12'], $equal->parameters());
     }
 
-    /**
-     * @test
-     */
     public function testIsNull()
     {
         $equal = new IsNull('aaa');
@@ -126,9 +99,6 @@ class ExpressionTest extends TestCase
         $this->assertSame([], $equal->parameters());
     }
 
-    /**
-     * @test
-     */
     public function testIsNotNull()
     {
         $equal = new IsNotNull('aaa');

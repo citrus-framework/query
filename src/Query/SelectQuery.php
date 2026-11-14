@@ -138,11 +138,11 @@ class SelectQuery implements CrudQuery
     protected function toColumnsQuery(): string
     {
         // 結果クラスがカウントの場合はプロパティをcount(*) as countにする
-        if (0 === count($this->properties) and ResultCount::class === $this->resultClass)
+        if (count($this->properties) === 0 and $this->resultClass === ResultCount::class)
         {
             return 'count(*) AS count';
         }
-        if (0 === count($this->properties))
+        if (count($this->properties) === 0)
         {
             return '*';
         }

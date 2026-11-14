@@ -55,7 +55,7 @@ class Record extends \stdClass implements ResultClass
         $properties = get_object_vars($this);
         foreach ($properties as $ky => $vl)
         {
-            if (true === is_null($vl))
+            if (is_null($vl) === true)
             {
                 unset($properties[$ky]);
             }
@@ -72,7 +72,7 @@ class Record extends \stdClass implements ResultClass
         $properties = $this->properties();
         foreach ($properties as $ky => $vl)
         {
-            if (true === is_null($vl))
+            if (is_null($vl) === true)
             {
                 unset($properties[$ky]);
             }

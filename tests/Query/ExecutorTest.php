@@ -25,7 +25,6 @@ class ExecutorTest extends TestCase
     /**
      * bindValueの3つめの引数(PDOの型)を確かめる。
      * 記録用のPDOStatementに差し替えて、渡されたPDOの型だけを見る。
-     * @test
      */
     public function testBindValueReceivesPdoTypes(): void
     {
@@ -66,7 +65,6 @@ class ExecutorTest extends TestCase
     /**
      * sqliteで実際に書き込めることだけを確かめる(動作の確認)。
      * PostgreSQLへの送られ方の根拠にはならない(pdo_pgsqlはboolを't'/'f'で送る)。
-     * @test
      */
     public function testExecuteOnSqlite(): void
     {
@@ -96,7 +94,6 @@ class ExecutorTest extends TestCase
 
     /**
      * 複数行のINSERTで、各行の値が順に、位置とPDOの型を合わせて渡ることを確かめる。
-     * @test
      */
     public function testBulkInsertBindsValuesInOrder(): void
     {
@@ -130,7 +127,6 @@ class ExecutorTest extends TestCase
 
     /**
      * RETURNINGで返った値を、executeReturning()で読めることを確かめる(sqliteでの動作の確認)。
-     * @test
      */
     public function testExecuteReturningOnSqlite(): void
     {
@@ -163,7 +159,6 @@ class ExecutorTest extends TestCase
 
     /**
      * ON CONFLICT DO NOTHINGで、重なった行は入らず、RETURNINGにも返らないことを確かめる(sqliteでの動作の確認)。
-     * @test
      */
     public function testOnConflictDoNothingOnSqlite(): void
     {

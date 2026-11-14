@@ -18,9 +18,6 @@ use PHPUnit\Framework\TestCase;
  */
 class DeleteQueryTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function testToQueryAndToParameters()
     {
         $deleteQuery = new DeleteQuery('samples');
@@ -38,9 +35,6 @@ class DeleteQueryTest extends TestCase
         $this->assertSame(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'], $deleteQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testWhereNullAndWhereNotNull()
     {
         $deleteQuery = new DeleteQuery('samples');
