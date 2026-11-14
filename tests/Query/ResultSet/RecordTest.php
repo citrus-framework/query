@@ -14,6 +14,7 @@ use Citrus\Query\RawExpr;
 use Citrus\Query\ResultSet\Record;
 use Citrus\Variable\Dates;
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,9 +24,6 @@ class RecordTest extends TestCase
 {
     private const PATTERN = '/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}[+-]\d{2}:?\d{2}$/';
 
-    /**
-     * @test
-     */
     public function testCompleteForCreateWithTimezone(): void
     {
         $record = new Record();
@@ -35,9 +33,6 @@ class RecordTest extends TestCase
         $this->assertSame($record->created_at, $record->updated_at);
     }
 
-    /**
-     * @test
-     */
     public function testCompleteForUpdateWithTimezone(): void
     {
         $record = new Record();
@@ -47,9 +42,6 @@ class RecordTest extends TestCase
         $this->assertInstanceOf(RawExpr::class, $record->rev);
     }
 
-    /**
-     * @test
-     */
     public function testGivenTimestampIsUsedAsIs(): void
     {
         $record = new Record();
@@ -63,11 +55,10 @@ class RecordTest extends TestCase
 
     /**
      * PHPの時刻帯ごとに、時差と瞬間が正しいことを確かめる
-     * @test
-     * @dataProvider timezoneProvider
      * @param string $timezone 時刻帯
      * @param string $offset   期待する時差
      */
+    #[DataProvider('timezoneProvider')]
     public function testTimestampMatchesTimezoneAndInstant(string $timezone, string $offset): void
     {
         $original = date_default_timezone_get();

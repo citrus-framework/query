@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
  */
 class BulkInsertQueryTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function testToQueryAndToParameters()
     {
         $bulkInsertQuery = new BulkInsertQuery('samples');
@@ -35,9 +32,6 @@ class BulkInsertQueryTest extends TestCase
         $this->assertSame(['a', 'b', 'c', 'd', 'e', null], $bulkInsertQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testPropertiesWithDifferentColumns()
     {
         $this->expectException(DatabaseException::class);
@@ -48,9 +42,6 @@ class BulkInsertQueryTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
     public function testOnConflictDoNothingAndReturning()
     {
         $bulkInsertQuery = new BulkInsertQuery('samples');

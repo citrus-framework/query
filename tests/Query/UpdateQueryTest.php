@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
  */
 class UpdateQueryTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function testToQueryAndToParameters()
     {
         $updateQuery = new UpdateQuery('samples');
@@ -43,9 +40,6 @@ class UpdateQueryTest extends TestCase
         $this->assertSame(['a', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'], $updateQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testWhereNullAndWhereNotNull()
     {
         $updateQuery = new UpdateQuery('samples');

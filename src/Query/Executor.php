@@ -108,7 +108,7 @@ class Executor
 
         // プリペア実行
         $statement = $handle->prepare($queryPack->callQuery());
-        if (false === $statement)
+        if ($statement === false)
         {
             throw DatabaseException::pdoErrorInfo($handle->errorInfo());
         }
@@ -132,9 +132,9 @@ class Executor
         return match (true)
         {
             is_bool($value) => PDO::PARAM_BOOL,
-            is_int($value)  => PDO::PARAM_INT,
+            is_int($value) => PDO::PARAM_INT,
             is_null($value) => PDO::PARAM_NULL,
-            default         => PDO::PARAM_STR,
+            default => PDO::PARAM_STR,
         };
     }
 }

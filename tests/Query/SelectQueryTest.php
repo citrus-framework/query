@@ -19,9 +19,6 @@ use PHPUnit\Framework\TestCase;
  */
 class SelectQueryTest extends TestCase
 {
-    /**
-     * @test
-     */
     public function testToQueryAndToParameters()
     {
         $selectQuery = new SelectQuery('samples', ['sample_id', 'name', 'created_at']);
@@ -46,9 +43,6 @@ class SelectQueryTest extends TestCase
         $this->assertSame('SELECT sample_id, name, created_at FROM samples WHERE sample_id = ? AND sample_id > ? AND sample_id >= ? AND sample_id IN (?, ?) AND sample_id < ? AND sample_id <= ? AND sample_id != ? AND sample_id NOT IN (?, ?, ?) AND sample_id LIKE ? AND sample_id NOT LIKE ? AND sample_id ILIKE ? AND sample_id NOT ILIKE ? ORDER BY sample_id ASC, name DESC LIMIT ? OFFSET ?', $selectQuery->toQuery());
         $this->assertSame(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '%12', '13_', '%14', '15_', 10, 20], $selectQuery->toParameters());
     }
-    /**
-     * @test
-     */
     public function testCount()
     {
         $selectQuery = new SelectQuery('samples');
@@ -73,9 +67,6 @@ class SelectQueryTest extends TestCase
         $this->assertSame(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '%12', '13_', 10, 20], $selectQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testWhereNullAndWhereNotNull()
     {
         $selectQuery = new SelectQuery('samples');
@@ -90,9 +81,6 @@ class SelectQueryTest extends TestCase
         $this->assertSame(['1', 1], $selectQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testGroupBy()
     {
         $selectQuery = new SelectQuery('samples', ['sample_id', 'name', 'count(*) AS count']);
@@ -108,9 +96,6 @@ class SelectQueryTest extends TestCase
         $this->assertSame(['0', 10], $selectQuery->toParameters());
     }
 
-    /**
-     * @test
-     */
     public function testJoin()
     {
         $selectQuery = new SelectQuery('user_tags ut', ['ut.user_tag_id', 't.name']);
