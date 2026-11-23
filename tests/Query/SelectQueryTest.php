@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Test\Query;
 
+use Citrus\Query\RawExpr;
 use Citrus\Query\ResultSet\ResultCount;
 use Citrus\Query\SelectQuery;
 use PHPUnit\Framework\TestCase;
@@ -79,6 +80,19 @@ class SelectQueryTest extends TestCase
 
         $this->assertSame('SELECT * FROM samples WHERE sample_id = ? AND deleted_at IS NULL AND name IS NOT NULL LIMIT ?', $selectQuery->toQuery());
         $this->assertSame(['1', 1], $selectQuery->toParameters());
+    }
+
+    public function testWhereInArray()
+    {
+        $selectQuery = new SelectQuery('samples');
+        $selectQuery->whereInArray('source_tag_ids', 'a');
+        $this->assertSame('SELECT * FROM samples WHERE ? = ANY(source_tag_ids) ', $selectQuery->toQuery());
+        $this->assertSame(['a'], $selectQuery->toParameters());
+
+        $selectQuery = new SelectQuery('samples');
+        $selectQuery->whereInArray('source_tag_ids', new RawExpr('CAST(? AS character varying)', ['b']));
+        $this->assertSame('SELECT * FROM samples WHERE CAST(? AS character varying) = ANY(source_tag_ids) ', $selectQuery->toQuery());
+        $this->assertSame(['b'], $selectQuery->toParameters());
     }
 
     public function testGroupBy()

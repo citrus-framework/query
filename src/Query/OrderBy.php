@@ -17,7 +17,7 @@ use Citrus\Variable\Strings;
  */
 trait OrderBy
 {
-    /** @var array<string, boolean> */
+    /** @var array<string, bool> */
     protected array $orders = [];
 
     /**

@@ -22,7 +22,7 @@ class BulkInsertQuery implements CrudQuery
     use OnConflict;
     use Returning;
 
-    /** @var array<int, array<string, string|int|bool|float|null>> 保存プロパティの一覧(1行に1つ) */
+    /** @var array<int, array<string, string|int|bool|float|RawExpr|null>> 保存プロパティの一覧(1行に1つ) */
     protected array $properties = [];
 
     /**
@@ -48,7 +48,7 @@ class BulkInsertQuery implements CrudQuery
     /**
      * 保存プロパティの定義
      * 1行に1つの保存プロパティを並べる。どの行も、1行目と同じカラムを同じ順に並べる
-     * @param array<int, array<string, string|int|bool|float|null>> $properties
+     * @param array<int, array<string, string|int|bool|float|RawExpr|null>> $properties
      * @return $this
      * @throws DatabaseException
      */
@@ -78,10 +78,10 @@ class BulkInsertQuery implements CrudQuery
             'INSERT INTO %s (%s) VALUES %s',
             $this->table,
             implode(', ', $columns),
-            implode(', ', array_fill(0, count($this->properties), sprintf(
-                '(%s)',
-                implode(', ', array_fill(0, count($columns), '?')),
-            ))),
+            implode(', ', array_map(
+                static fn (array $row): string => sprintf('(%s)', Bindings::placeholders($row)),
+                $this->properties,
+            )),
         );
 
         // On Conflict
@@ -104,7 +104,10 @@ class BulkInsertQuery implements CrudQuery
      */
     public function toParameters(): array
     {
-        return array_merge([], ...array_map('array_values', $this->properties));
+        $rows = array_map(Bindings::parameters(...), $this->properties);
+        // VALUES の値のあとに、DO UPDATE の SET の値を並べる
+        $rows[] = $this->toOnConflictParameters();
+        return array_merge([], ...$rows);
     }
 
     /**

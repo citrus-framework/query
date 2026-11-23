@@ -44,7 +44,7 @@ class InsertQuery implements CrudQuery
 
     /**
      * 保存プロパティの定義
-     * @param string[] $properties
+     * @param array<string, string|int|bool|float|RawExpr|null> $properties
      * @return $this
      */
     public function properties(array $properties): self
@@ -62,7 +62,7 @@ class InsertQuery implements CrudQuery
             'INSERT INTO %s (%s) VALUES (%s)',
             $this->table,
             implode(', ', array_keys($this->properties)),
-            implode(', ', array_fill(0, count($this->properties), '?')),
+            Bindings::placeholders($this->properties),
         );
 
         // On Conflict
@@ -85,7 +85,7 @@ class InsertQuery implements CrudQuery
      */
     public function toParameters(): array
     {
-        return array_values($this->properties);
+        return array_merge(Bindings::parameters($this->properties), $this->toOnConflictParameters());
     }
 
     /**

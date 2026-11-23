@@ -53,6 +53,42 @@ class RecordTest extends TestCase
         $this->assertSame('2026-11-05 01:02:03', $record->updated_at);
     }
 
+    public function testSetNullIsReturnedByProperties(): void
+    {
+        $record = new Record();
+        $record->rev = 3;
+        $record->setNull('created_at', 'memo');
+
+        $this->assertSame(['status' => 0, 'rev' => 3, 'created_at' => null, 'memo' => null], $record->properties());
+    }
+
+    public function testSetNullColumnWithNewValueReturnsValue(): void
+    {
+        $record = new Record();
+        $record->setNull('created_at', 'memo');
+        $record->created_at = '2026-11-04 15:00:00';
+
+        $this->assertSame(['status' => 0, 'created_at' => '2026-11-04 15:00:00', 'memo' => null], $record->properties());
+    }
+
+    public function testSetNullIsNotInNonnullProperties(): void
+    {
+        $record = new Record();
+        $record->setNull('created_at');
+
+        $this->assertSame(['status' => 0], $record->nonnullProperties());
+    }
+
+    public function testPropertiesDoesNotContainNullColumnsHolder(): void
+    {
+        $record = new Record();
+        $record->setNull('created_at');
+
+        $this->assertArrayNotHasKey('nullColumns', $record->properties());
+        $this->assertArrayNotHasKey('nullColumns', $record->nonnullProperties());
+        $this->assertArrayNotHasKey('nullColumns', (new Record())->properties());
+    }
+
     /**
      * PHPの時刻帯ごとに、時差と瞬間が正しいことを確かめる
      * @param string $timezone 時刻帯
