@@ -37,6 +37,9 @@ class Record extends \stdClass implements ResultClass
     /** @var int|RawExpr|null rev */
     public int|RawExpr|null $rev = null;
 
+    /** @var array<string, string> setNull() で覚えた、null で保存するカラム名 */
+    protected array $nullColumns = [];
+
     /**
      * プライマリキーのカラム名配列を取得
      * @return string[]
@@ -47,17 +50,36 @@ class Record extends \stdClass implements ResultClass
     }
 
     /**
+     * 指定したプロパティに null を入れ、null で保存するカラムとして覚えておく
+     * @param string ...$columns
+     */
+    public function setNull(string ...$columns): void
+    {
+        foreach ($columns as $column)
+        {
+            $this->{$column} = null;
+            $this->nullColumns[$column] = $column;
+        }
+    }
+
+    /**
      * プロパティ配列の返却
+     * null でないプロパティに加えて、setNull() で覚えたカラムのうち今も null のものを、null として返す
      * @return array<string, string|int|bool|float|RawExpr|null>
      */
     public function properties(): array
     {
         $properties = get_object_vars($this);
-        foreach ($properties as $ky => $vl)
+        // 覚えておくための入れ物は、結果に入れない
+        unset($properties['nullColumns']);
+        $properties = array_filter($properties, static fn (mixed $vl): bool => $vl !== null);
+
+        foreach ($this->nullColumns as $column)
         {
-            if (is_null($vl) === true)
+            // 入れ直されたカラムは、その値のまま返す
+            if (array_key_exists($column, $properties) === false)
             {
-                unset($properties[$ky]);
+                $properties[$column] = null;
             }
         }
         return $properties;
@@ -69,15 +91,7 @@ class Record extends \stdClass implements ResultClass
      */
     public function nonnullProperties(): array
     {
-        $properties = $this->properties();
-        foreach ($properties as $ky => $vl)
-        {
-            if (is_null($vl) === true)
-            {
-                unset($properties[$ky]);
-            }
-        }
-        return $properties;
+        return array_filter($this->properties(), static fn (mixed $vl): bool => $vl !== null);
     }
 
     /**

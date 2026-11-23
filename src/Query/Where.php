@@ -16,6 +16,7 @@ use Citrus\Query\Where\GreaterThan;
 use Citrus\Query\Where\GreaterThanEqual;
 use Citrus\Query\Where\ILike;
 use Citrus\Query\Where\In;
+use Citrus\Query\Where\InArray;
 use Citrus\Query\Where\IsNotNull;
 use Citrus\Query\Where\IsNull;
 use Citrus\Query\Where\LessThan;
@@ -109,7 +110,7 @@ trait Where
     /**
      * Where In
      * @param string   $arg1
-     * @param string[] $arg2 // TODO: サブクエリも対応したい
+     * @param string[] $arg2
      * @return $this
      */
     public function whereIn(string $arg1, array $arg2): self
@@ -121,12 +122,24 @@ trait Where
     /**
      * Where Not In
      * @param string   $arg1
-     * @param string[] $arg2 // TODO: サブクエリも対応したい
+     * @param string[] $arg2
      * @return $this
      */
     public function whereNotIn(string $arg1, array $arg2): self
     {
         $this->wheres[] = new NotIn($arg1, $arg2);
+        return $this;
+    }
+
+    /**
+     * Where In Array(配列のカラムが値を含む)
+     * @param string             $column 配列のカラム
+     * @param string|int|RawExpr $value  含むかを見る値
+     * @return $this
+     */
+    public function whereInArray(string $column, string|int|RawExpr $value): self
+    {
+        $this->wheres[] = new InArray($column, $value);
         return $this;
     }
 
@@ -232,9 +245,10 @@ trait Where
         $query = '';
         if (count($this->wheres) > 0)
         {
-            $query .= 'WHERE ' . implode(' AND ', array_map(function (Expression $expr) {
-                return $expr->query();
-            }, $this->wheres));
+            $query .= 'WHERE ' . implode(' AND ', array_map(
+                static fn (Expression $expr): string => $expr->query(),
+                $this->wheres,
+            ));
         }
         return $query;
     }

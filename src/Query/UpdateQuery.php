@@ -66,20 +66,8 @@ class UpdateQuery implements CrudQuery
             $this->table,
         );
 
-        // Set
-        $sets = [];
-        foreach ($this->properties as $ky => $vl)
-        {
-            if ($vl instanceof RawExpr)
-            {
-                // クエリ直書きの場合
-                $sets[] = sprintf('%s = %s', $ky, $vl->toQuery());
-                continue;
-            }
-
-            $sets[] = sprintf('%s = ?', $ky);
-        }
-        $query .= ' SET ' . implode(', ', $sets);
+        // Set(RawExpr は式を直接書く)
+        $query .= ' SET ' . (new Assignments($this->properties))->toQuery();
 
         // Where
         if (count($this->wheres) > 0)
@@ -95,18 +83,9 @@ class UpdateQuery implements CrudQuery
      */
     public function toParameters(): array
     {
-        $properties = [];
-        foreach ($this->properties as $vl)
-        {
-            if ($vl instanceof RawExpr)
-            {
-                // クエリ直書きの場合はprepareのパラメータにはならないのでskip
-                continue;
-            }
-
-            $properties[] = $vl;
-        }
-        return array_merge($properties, $this->toWhereParameters());
+        // RawExpr は、式の値を、その場所の順で入れる
+        $assignments = new Assignments($this->properties);
+        return array_merge($assignments->toParameters(), $this->toWhereParameters());
     }
 
     /**

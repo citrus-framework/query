@@ -60,7 +60,7 @@ abstract class StandardRepository extends Repository
         return $this->executor->build($this
             ->builder($this->table())
             ->updateQuery()
-            ->properties($property->nonnullProperties())
+            ->properties($property->properties())
             ->whereEqual('rowid', $condition->rowid)
             ->whereEqual('rev', $condition->rev)
         )->execute();

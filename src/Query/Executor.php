@@ -34,7 +34,7 @@ class Executor
         protected Connection|null $connection = null
     ) {
         // なければPOOLから取得
-        $this->connection = $connection ?: ConnectionPool::callDefault();
+        $this->connection = $connection ?? ConnectionPool::callDefault();
         // 接続もしてしまう
         $this->connection->connect();
     }

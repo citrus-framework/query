@@ -18,6 +18,12 @@ trait OnConflict
     /** @var string[] */
     protected array $conflicts = [];
 
+    /** @var bool DO UPDATE にするか(false なら DO NOTHING) */
+    protected bool $conflictUpdate = false;
+
+    /** @var array<string, string|int|bool|float|RawExpr|null> DO UPDATE の SET(カラム => 値か RawExpr) */
+    protected array $conflictSets = [];
+
     /**
      * On Conflict Do Nothing
      * @param string[] $columns 一意性を見るカラム
@@ -26,6 +32,22 @@ trait OnConflict
     public function onConflictDoNothing(array $columns): self
     {
         $this->conflicts = $columns;
+        $this->conflictUpdate = false;
+        $this->conflictSets = [];
+        return $this;
+    }
+
+    /**
+     * On Conflict Do Update
+     * @param string[]                                          $columns 一意性を見るカラム
+     * @param array<string, string|int|bool|float|RawExpr|null> $sets    カラム => 値か RawExpr
+     * @return $this
+     */
+    public function onConflictDoUpdate(array $columns, array $sets): self
+    {
+        $this->conflicts = $columns;
+        $this->conflictUpdate = true;
+        $this->conflictSets = $sets;
         return $this;
     }
 
@@ -35,6 +57,26 @@ trait OnConflict
      */
     public function toOnConflictQuery(): string
     {
-        return sprintf('ON CONFLICT (%s) DO NOTHING', implode(', ', $this->conflicts));
+        $query = sprintf('ON CONFLICT (%s)', implode(', ', $this->conflicts));
+        if ($this->conflictUpdate === false)
+        {
+            return $query . ' DO NOTHING';
+        }
+
+        return $query . ' DO UPDATE SET ' . (new Assignments($this->conflictSets))->toQuery();
+    }
+
+    /**
+     * パラメーター生成(DO UPDATE の SET の値。DO NOTHING のときと、ON CONFLICT の句を書かないとき(一意性を見るカラムが無い)は空)
+     * @return array<int, mixed>
+     */
+    public function toOnConflictParameters(): array
+    {
+        if (count($this->conflicts) === 0)
+        {
+            return [];
+        }
+
+        return (new Assignments($this->conflictSets))->toParameters();
     }
 }

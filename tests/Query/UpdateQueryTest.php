@@ -40,6 +40,34 @@ class UpdateQueryTest extends TestCase
         $this->assertSame(['a', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'], $updateQuery->toParameters());
     }
 
+    public function testRawExprWithParameters()
+    {
+        $updateQuery = new UpdateQuery('samples');
+        $updateQuery->properties([
+            'a' => 'x',
+            'b' => new RawExpr('CAST(? AS jsonb)', ['{}']),
+            'c' => new RawExpr('current_timestamp'),
+            'd' => new RawExpr('? + ?', [1, 2]),
+            'e' => 'y',
+        ]);
+        $updateQuery->whereEqual('sample_id', '1');
+
+        $this->assertSame('UPDATE samples SET a = ?, b = CAST(? AS jsonb), c = current_timestamp, d = ? + ?, e = ? WHERE sample_id = ?', $updateQuery->toQuery());
+        $this->assertSame(['x', '{}', 1, 2, 'y', '1'], $updateQuery->toParameters());
+    }
+
+    public function testWhereInArray()
+    {
+        $updateQuery = new UpdateQuery('samples');
+        $updateQuery->properties(['name' => 'a']);
+        $updateQuery
+            ->whereInArray('source_tag_ids', 5)
+            ->whereInArray('tag_ids', new RawExpr('CAST(? AS character varying)', ['6']));
+
+        $this->assertSame('UPDATE samples SET name = ? WHERE ? = ANY(source_tag_ids) AND CAST(? AS character varying) = ANY(tag_ids)', $updateQuery->toQuery());
+        $this->assertSame(['a', 5, '6'], $updateQuery->toParameters());
+    }
+
     public function testWhereNullAndWhereNotNull()
     {
         $updateQuery = new UpdateQuery('samples');

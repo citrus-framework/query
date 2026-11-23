@@ -10,16 +10,6 @@ declare(strict_types=1);
 
 namespace Citrus\Query;
 
-use Citrus\Query\Where\Equal;
-use Citrus\Query\Where\Expression;
-use Citrus\Query\Where\GreaterThan;
-use Citrus\Query\Where\GreaterThanEqual;
-use Citrus\Query\Where\In;
-use Citrus\Query\Where\LessThan;
-use Citrus\Query\Where\LessThanEqual;
-use Citrus\Query\Where\NotEqual;
-use Citrus\Query\Where\NotIn;
-
 /**
  * Limit / Offset
  */
@@ -77,16 +67,7 @@ trait LimitOffset
      */
     public function toLimitOffsetQuery(): string
     {
-        $queries = [];
-        if (!is_null($this->limit))
-        {
-            $queries[] = 'LIMIT ?';
-        }
-        if (!is_null($this->offset))
-        {
-            $queries[] = 'OFFSET ?';
-        }
-        return implode(' ', $queries);
+        return (new LimitOffsetClause($this->limit, $this->offset))->toQuery();
     }
 
     /**
@@ -95,15 +76,6 @@ trait LimitOffset
      */
     public function toLimitOffsetParameters(): array
     {
-        $parameters = [];
-        if (!is_null($this->limit))
-        {
-            $parameters[] = $this->limit;
-        }
-        if (!is_null($this->offset))
-        {
-            $parameters[] = $this->offset;
-        }
-        return $parameters;
+        return (new LimitOffsetClause($this->limit, $this->offset))->toParameters();
     }
 }
